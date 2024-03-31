@@ -1,0 +1,48 @@
+import random
+
+# 题目和答案
+questions = ["上车", "点火"]
+options = ["S.上车 R.视频认证 Z.下车 W.过车尾 T.经过车头 D.点火 L.踩离合", "S.上车 R.视频认证 Z.下车 W.过车尾 T.经过车头 L.踩离合 D.点火"]
+answers = ["SRZWTS", "LD"]
+
+# 显示题目和选项
+def displayQuestion(index):
+    print("题目：", questions[index])
+    print("请选择正确选项：")
+
+    # 获取选项
+    option = options[index].split()
+    random.shuffle(option)
+    for i in range(len(option)):
+        print(option[i])
+        
+# 检查答案是否正确
+def checkAnswer(index, input):
+    correct_answer = answers[index]
+    for letter in input:
+        if letter not in correct_answer:
+            return False
+    for letter in correct_answer:
+        if letter not in input:
+            return False
+    return True
+
+score = 0
+
+# 依次出题
+for i in range(len(questions)):
+    displayQuestion(i)
+    answer = input().strip()
+
+    if checkAnswer(i, answer):
+        score += 50
+    else:
+        print(questions[i] + "的正确答案为：" + answers[i] + "，扣100分，考试结束, 成绩不合格")
+        exit()
+
+# 判断是否全部正确
+if score == 100:
+    # 调用 s3 程序
+    import os
+    os.system("./s3")
+
